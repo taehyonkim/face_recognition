@@ -9,8 +9,13 @@ services:
       context: .
       #Uncomment this line to run the example on the GPU (requires Nvidia-Docker)
       # dockerfile: Dockerfile.gpu 
+    #privileged: true
     command: python3 -u find_faces_in_picture_cnn.py
+    network_mode: host
+    environment:
+      - DISPLAY=${DISPLAY}
     volumes:
       - ./:/face_recognition
+      - /tmp/.X11-unix:/tmp/.X11-unix
     #Uncomment this line to run the example on the GPU (requires Nvidia-Docker)
     # runtime: nvidia
