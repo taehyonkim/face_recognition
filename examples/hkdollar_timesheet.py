@@ -39,6 +39,7 @@ face_names = []
 process_this_frame = True
 
 while True:
+    name = "Unknown"
     # Grab a single frame of video
     ret, frame = video_capture.read()
 
@@ -91,13 +92,19 @@ while True:
         cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
         font = cv2.FONT_HERSHEY_DUPLEX
         cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
-
+        cv2.rectangle(frame, (0, bottom + 10), (550, bottom + 80), (0, 0, 0), cv2.FILLED)
+        cv2.putText(frame, "Cannot find your picture.", (5, bottom + 35), font, 1.0, (0, 0, 255), 1)
+        cv2.putText(frame, "Would you like to register? [y]", (5, bottom + 70), font, 1.0, (0, 0, 255), 1)
     # Display the resulting image
-    cv2.imshow('Video', frame)
+    cv2.imshow(name, frame)
 
     # Hit 'q' on the keyboard to quit!
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    key_pressed = cv2.waitKey(1) & 0xFF
+    if key_pressed == ord('q'):
         break
+    elif key_pressed == ord('y'):
+        print(f'key_pressed = {chr(key_pressed)}')
+
 
 # Release handle to the webcam
 video_capture.release()
