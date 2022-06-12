@@ -2,6 +2,17 @@ import face_recognition
 import cv2
 import numpy as np
 
+
+class Employee:
+    def __init__(self, name, image, encoding):
+        self.name = name
+        self.image = image
+        self.encoding = encoding
+
+    def __str__(self):
+        return f"name: {self.name}"
+
+
 # This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
 # other example, but it includes some basic performance tweaks to make things run a lot faster:
 #   1. Process each video frame at 1/4 resolution (though still display it at full resolution)
@@ -32,6 +43,11 @@ known_face_names = [
     "Joe Biden"
 ]
 
+e1 = Employee("Barak Obama", obama_image, obama_face_encoding)
+e2 = Employee("Joe Biden", biden_image, biden_face_encoding)
+print(e1)
+print(e2)
+
 # Initialize some variables
 face_locations = []
 face_encodings = []
@@ -42,7 +58,7 @@ while True:
     name = "Unknown"
     # Grab a single frame of video
     ret, frame = video_capture.read()
-
+    frame_without_text = np.ndarray.copy(frame)
     # Resize frame of video to 1/4 size for faster face recognition processing
     small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
 
@@ -76,7 +92,6 @@ while True:
 
     process_this_frame = not process_this_frame
 
-
     # Display the results
     for (top, right, bottom, left), name in zip(face_locations, face_names):
         # Scale back up face locations since the frame we detected in was scaled to 1/4 size
@@ -96,14 +111,17 @@ while True:
         cv2.putText(frame, "Cannot find your picture.", (5, bottom + 35), font, 1.0, (0, 0, 255), 1)
         cv2.putText(frame, "Would you like to register? [y]", (5, bottom + 70), font, 1.0, (0, 0, 255), 1)
     # Display the resulting image
-    cv2.imshow(name, frame)
+    cv2.imshow("Clock In/Out", frame)
 
     # Hit 'q' on the keyboard to quit!
     key_pressed = cv2.waitKey(1) & 0xFF
     if key_pressed == ord('q'):
         break
     elif key_pressed == ord('y'):
+        cv2.imshow("Enter your name", frame_without_text)
+        frame = np.ndarray.copy(frame_without_text)
         print(f'key_pressed = {chr(key_pressed)}')
+        cv2.imwrite("tae.jpg", frame)
 
 
 # Release handle to the webcam
